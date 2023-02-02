@@ -56,7 +56,7 @@ read_testdata (file, encoding="ANSI")
 É importante que a formatação e organização da base de dados seja exatamente como demonstrada na imagem de exemplo abaixo, ou seja, é estritamente necessário que as colunas e linhas possuam as mesmas nomenclaturas e ordem de aparição do exemplo abaixo. Do contrário será necessário realizar a carga e leitura da base de dados (e todo o tratamento necessário) de maneira manual via código.
 
 <a>
-    <img src="https://github.com/GabrielVZanata/pyTensileTest/formatodataset.png" alt="Formato necessário para o dataset" width=72 height=72>
+    <img src="https://github.com/GabrielVZanata/pyTensileTest/blob/main/formatodataset.png" alt="Formato necessário para o dataset" width=400 height=200>
   </a>
 
 
@@ -114,10 +114,10 @@ Se o algoritmo não encontrar um trecho com o R² e tamanho de intervalo definid
 correct_diag(df, cut=False, min_rsq = 0.9996, int_size=300, correct_force=False, diam=[])
 ```
   <a>
-    <img src="https://github.com/GabrielVZanata/pyTensileTest/5_1N.png" alt="Diagrama não corrigido" width=200 height=200>
+    <img src="https://github.com/GabrielVZanata/pyTensileTest/blob/main/5_1N.png" alt="Diagrama não corrigido" width=400 height=300>
   </a>
   <a>
-    <img src="https://github.com/GabrielVZanata/pyTensileTest/5_1.png" alt="Diagrama corrigido" width=200 height=200>
+    <img src="https://github.com/GabrielVZanata/pyTensileTest/blob/main/5_1.png" alt="Diagrama corrigido" width=400 height=300>
   </a>
   
 ## get_info
@@ -148,7 +148,7 @@ Os argumento esperados são:
 plot_sample(df, numbar=0, obs="", save=False, folder="", info=False)
 ```
   <a>
-    <img src="https://github.com/GabrielVZanata/pyTensileTest/5_1.png" alt="Plot individual" width=200 height=200>
+    <img src="https://github.com/GabrielVZanata/pyTensileTest/blob/main/5_1.png" alt="Plot individual" width=400 height=300>
   </a>
 
   
@@ -168,7 +168,7 @@ Os argumento esperados são:
 plot_group (df, lista, obs="", group_name="", save=False, folder="")
 ```
   <a>
-    <img src="https://github.com/GabrielVZanata/pyTensileTest/Amostras de 16mm.png" alt="Plot grupo" width=200 height=200>
+    <img src="https://github.com/GabrielVZanata/pyTensileTest/blob/main/Amostras de 16mm.png" alt="Plot grupo" width=400 height=300>
   </a>
 
 ## Autor

@@ -1,0 +1,199 @@
+Metadata-Version: 2.1
+Name: tensile-test-data-manipulation
+Version: 0.0.1
+Summary: Um pacote para manipulação de dados de teste de tração, criação e correção de diagramas tensão x deformação.
+Home-page: https://github.com/GabrielVZanata/pyTensileTest
+Author: Gabriel Valverde Zanata da Silva
+Author-email: gabriel.valverde@hotmail.com
+License: MIT License
+Keywords: shimadzu tensile test
+Platform: UNKNOWN
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# Pacote de funÃ§Ãµes para manipulaÃ§Ã£o de dados de Ensaios de TraÃ§Ã£o
+
+<p align="center">
+  <h3 align="center">pyTensileTest</h3>
+
+  <p align="center">
+    Uma biblioteca com funÃ§Ãµes para manipulaÃ§Ã£o de dados de ensaios de traÃ§Ã£o.
+    <br>
+    <a href="https://reponame/issues/new?template=bug.md">Report bug</a>
+  </p>
+</p>
+
+
+## ConteÃºdo
+
+- [DescriÃ§Ã£o](#DescriÃ§Ã£o)
+- [read_testdata](#read_testdata)
+- [to_tension](#to_tension)
+- [linearize_diag](#linearize_diag)
+- [cut_end](#cut_end)
+- [correct_diag](#correct_diag)
+- [get_info](#get_info)
+- [plot_sample](#plot_sample)
+- [plot_group](#plot_group)
+- [Autor](#Autor)
+- [Copyright and license](#copyright-and-license)
+
+
+## DescriÃ§Ã£o
+
+Esse cÃ³digo foi desenvolvido por Gabriel Valverde Zanata da Silva, ex aluno da Escola PolitÃ©cnica da Universidade de SÃ£o Paulo, para facilitar a manipulaÃ§Ã£o e anÃ¡lise de dados de ensaios da mÃ¡quina universal de ensaios Shimadzu. 
+
+O objetivo principal deste cÃ³digo Ã© ler, manipular, corrigir e plotar corretamente diagramas TensÃ£o x DeformaÃ§Ã£o, nÃ£o havendo garantia de que funcionarÃ¡ para outros tipos de ensaio ou outras maquinas universais de ensaios.
+
+AlÃ©m disso, este Ã© um projeto open source desenvolvido de maneira individual com o intuito de auxiliar alunos e pesquisadores em suas atividades acadÃªmicas/de pesquisa, portanto, se algo nÃ£o funcionar correamente, nÃ£o devem ser esperadas atualizaÃ§Ãµes/correÃ§Ãµes de bugs, apesar de o feedback ser muito bem-vindo atravÃ©s dos conais de comunicaÃ§Ã£o do autor.
+
+
+Para que o cÃ³digo possa funcionar adequadamente Ã© necessÃ¡rio prestar atenÃ§Ã£o na formataÃ§Ã£o dos dados originais. As funÃ§Ãµes do pacote esperam um formato especÃ­fico que deve ser idÃªntico ao do dataset "Tracao_acos.csv" disponÃ­vel neste repositÃ³rio.
+Espera-se que esta seja a formataÃ§Ã£o padrÃ£o de dados oriundos da Shimadzu. Caso a formataÃ§Ã£o seja diferente, serÃ¡ necessÃ¡rio alterar as funÃ§Ãµes do pacote.
+
+
+O uso, alteraÃ§Ã£o, e reproduÃ§Ã£o do material desta biblioteca sÃ£o livres, contanto que a fonte e o autor sejam mencionados.
+
+
+## read_testdata
+
+A funÃ§Ã£o read_testdata tem como intuito realizar a leitura da base de dados gerada pela mÃ¡quina universal de ensaios de forma simplificada, eliminando toda a etapa de tratamento que seira necessÃ¡ria para realizar a carga e leitura de maneira manual.
+
+Os argumentos esperados sÃ£o:
+- file - aquivo da base de dados
+- enconding - codificaÃ§Ã£o do arquivo (por padrÃ£o: ANSI)
+
+```code
+read_testdata (file, encoding="ANSI")
+```
+Ã‰ importante que a formataÃ§Ã£o e organizaÃ§Ã£o da base de dados seja exatamente como demonstrada na imagem de exemplo abaixo, ou seja, Ã© estritamente necessÃ¡rio que as colunas e linhas possuam as mesmas nomenclaturas e ordem de apariÃ§Ã£o do exemplo abaixo. Do contrÃ¡rio serÃ¡ necessÃ¡rio realizar a carga e leitura da base de dados (e todo o tratamento necessÃ¡rio) de maneira manual via cÃ³digo.
+
+<a>
+    <img src="https://github.com/GabrielVZanata/pyTensileTest/blob/main/formatodataset.png" alt="Formato necessÃ¡rio para o dataset" width=400 height=200>
+  </a>
+
+
+## to_tension
+
+A funÃ§Ã£o to_tension permite obter a tensÃ£o real aplicada sobre a amostra, calculando com base na forÃ§a aplicada pela mÃ¡quina e na bitola (diÃ¢metro) efetiva da amostra.
+
+Os argumentos esperados sÃ£o:
+- df - o Dataframe contendo os dados de forÃ§a e deslocamento (no formato do df retornado atravÃ©s da funÃ§Ã£o read_testdata)
+- diam - lista contendo os diÃ¢metros de cada amostra, na ordem em que aparecem no Dataframe.
+
+```code
+to_tension(df,diam)
+```
+
+## linearize_diag
+
+A funÃ§Ã£o linearize_diag identifica o trecho mais linear para correÃ§Ã£o do trecho inicial (elÃ¡stico linear) dos diagramas, que, geralmente, Ã© gerado de forma imprecisa durante os ensaios. Esta funÃ§Ã£o deve ser utilizada em conjunto com a funÃ§Ã£o correct_diag.
+
+Os argumento esperados sÃ£o:
+- df - o Dataframe contendo os dados de tensÃ£o e deslocamento (no formato do df retornado atravÃ©s da funÃ§Ã£o read_testdata)
+- min_rsq - o valor mÃ­nimo de RÂ² que o algoritmo deve buscar. Note que, o valor de RÂ² varia de 0 a 1, sendo mais linear a medida que se aproxima de 1. PorÃ©m, se definido um valor muito alto a funÃ§Ã£o pode nÃ£o encontrar um trecho tÃ£o linear, o que causarÃ¡ erros.
+- int_size - o tamanho dos intervalos a serem analizados em quantidade de instantes. Por padrÃ£o a funÃ§Ã£o analisarÃ¡ os dados em trechos contendo 300 instantes. Quanto maior esse intervalo mais intensa serÃ¡ a linearizaÃ§Ã£o. 
+Se o algoritmo nÃ£o encontrar um trecho com o RÂ² e tamanho de intervalo definidos, estes argumentos devem ser alterados (reduzidos) para evitar erros. 
+
+```code
+linearize_diag (df, min_rsq=0.9996, int_size=300)
+```
+
+## cut_end
+
+A funÃ§Ã£o cut_end realiza a remoÃ§Ã£o dos trechos medidos e plotados pela mÃ¡quina de ensaios apÃ³s a ruptura da amostra.
+
+Os argumentos esperados sÃ£o:
+- df - o Dataframe contendo os dados de tensÃ£o e deslocamento (no formato do df retornado atravÃ©s da funÃ§Ã£o read_testdata)
+
+```code
+cut_end(df)
+```
+
+  
+## correct_diag
+
+A funÃ§Ã£o correct_diag aplica as funÃ§Ãµes to_tension, linearize_diag, cut_end para corrigir completamente os diagramas alterando as medidas de forÃ§a para tensÃ£o, linearizando os trechos iniciais, corrigindo a deformaÃ§Ã£o e removendo os dados apÃ³s a ruptura.
+
+Os argumentos esperados sÃ£o:
+- df - o Dataframe contendo os dados de tensÃ£o e deslocamento (no formato do df retornado atravÃ©s da funÃ§Ã£o read_testdata)
+- min_rsq - o valor mÃ­nimo de RÂ² que o algoritmo deve buscar. Note que, o valor de RÂ² varia de 0 a 1, sendo mais linear a medida que se aproxima de 1. PorÃ©m, se definido um valor muito alto a funÃ§Ã£o pode nÃ£o encontrar um trecho tÃ£o linear, o que causarÃ¡ erros.
+- int_size - o tamanho dos intervalos a serem analizados em quantidade de instantes. Por padrÃ£o a funÃ§Ã£o analisarÃ¡ os dados em trechos contendo 300 instantes. Quanto maior esse intervalo mais intensa serÃ¡ a linearizaÃ§Ã£o. 
+Se o algoritmo nÃ£o encontrar um trecho com o RÂ² e tamanho de intervalo definidos, estes argumentos devem ser alterados (reduzidos) para evitar erros. 
+- correct_force - Se TRUE aplicarÃ¡ a funsÃ£o to_tension ao dataframe e esperarÃ¡ receber o parÃ¢metro diam.
+- diam - lista contendo os diÃ¢metros de cada amostra, na ordem em que aparecem no Dataframe.
+
+```code
+correct_diag(df, cut=False, min_rsq = 0.9996, int_size=300, correct_force=False, diam=[])
+```
+  <a>
+    <img src="https://github.com/GabrielVZanata/pyTensileTest/blob/main/5_1N.png" alt="Diagrama nÃ£o corrigido" width=400 height=300>
+  </a>
+  <a>
+    <img src="https://github.com/GabrielVZanata/pyTensileTest/blob/main/5_1.png" alt="Diagrama corrigido" width=400 height=300>
+  </a>
+  
+## get_info
+
+A funÃ§Ã£o get_info permite obter a tensÃ£o mÃ¡xima e a deformaÃ§Ã£o na tensÃ£o mÃ¡xima.
+Os argumentos esperados sÃ£o:
+- df - o Dataframe contendo os dados de tensÃ£o e deslocamento (no formato do df retornado atravÃ©s da funÃ§Ã£o read_testdata)
+- numbar - nÃºmero de apariÃ§Ã£o da amostra desejada (iniciada em 0),por exemplo: para analisar a 8Âª amostra do dataframe, deve-se utilizar numbar=7. 
+- parse - True para retornar o resultado em formato de Dataframe, False para retornar em formato de lista.
+
+```code
+get_info(df, numbar=0, parse=False)
+```
+
+## plot_sample
+
+A funÃ§Ã£o plot_sample plota o diagrama tensÃ£o x deformaÃ§Ã£o para uma amostra de maneira individual.
+
+Os argumento esperados sÃ£o:
+- df - o Dataframe contendo os dados de tensÃ£o e deslocamento (no formato do df retornado atravÃ©s da funÃ§Ã£o read_testdata)
+- numbar - nÃºmero de apariÃ§Ã£o da amostra desejada (iniciada em 0),por exemplo: para plotar a 8Âª amostra do dataframe, deve-se utilizar numbar=7. 
+- obs - Uma string com observaÃ§Ã£o a ser acrescentada ao tÃ­tulo do plot.
+- save - True para salvar o plot em disco.
+- folder - DiretÃ³rio onde o plot deve ser salvo.
+- info - True para acrescentar a tensÃ£o mÃ¡xima e deslocamento na tensÃ£o mÃ¡xima ao plot.
+
+```code
+plot_sample(df, numbar=0, obs="", save=False, folder="", info=False)
+```
+  <a>
+    <img src="https://github.com/GabrielVZanata/pyTensileTest/blob/main/5_1.png" alt="Plot individual" width=400 height=300>
+  </a>
+
+  
+## plot_group
+
+A funÃ§Ã£o plot_gorup plota o diagrama tensÃ£o x deformaÃ§Ã£o para um grupo de amostras selecionadas.
+
+Os argumento esperados sÃ£o:
+- df - o Dataframe contendo os dados de tensÃ£o e deslocamento (no formato do df retornado atravÃ©s da funÃ§Ã£o read_testdata)
+- lista - lista com os nÃºmeros de apariÃ§Ã£o das amostras desejadas (iniciada em 0),por exemplo: para plotar as 2Âª, 3Âª ,8Âª e 10Âª amostras do dataframe, deve-se utilizar lista=[1,2,7,9]. 
+- obs - Uma string com observaÃ§Ã£o a ser acrescentada ao tÃ­tulo do plot.
+- save - True para salvar o plot em disco.
+- folder - DiretÃ³rio onde o plot deve ser salvo.
+- group_name - String para definir o nome do grupo de amostras a ser apresentado no tÃ­tulo do plot.
+
+```code
+plot_group (df, lista, obs="", group_name="", save=False, folder="")
+```
+  <a>
+    <img src="https://github.com/GabrielVZanata/pyTensileTest/blob/main/Amostras de 16mm.png" alt="Plot grupo" width=400 height=300>
+  </a>
+
+## Autor
+
+**Gabriel Valverde Zanata da Silva**
+
+- <https://github.com/GabrielVZanata>
+- <https://www.linkedin.com/in/gabriel-valverde-62141a227/>
+
+
+## Copyright and license
+
+Code and documentation copyright 2023 Gabriel Valverde Zanata da Silva. Code released under the [MIT License](https://reponame/blob/master/LICENSE).
+
+

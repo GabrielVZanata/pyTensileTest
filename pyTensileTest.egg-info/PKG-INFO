@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: pyTensileTest
-Version: 0.0.2
+Version: 0.0.7
 Summary: A package for manipulating tensile test data, creating and correcting stress-strain diagrams.
 Home-page: https://github.com/GabrielVZanata/pyTensileTest
 Author: Gabriel Valverde Zanata da Silva

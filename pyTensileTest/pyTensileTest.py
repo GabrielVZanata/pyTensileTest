@@ -12,7 +12,7 @@ warnings.filterwarnings('ignore')
 def read_testdata (file,encoding="ANSI"):
     
     # Otendo nomes individuais das amostras ensaiadas
-    samples_csv = open(file,"r")
+    samples_csv = open(file,"r", encoding=encoding)
     for row in csv.reader(samples_csv, delimiter = ','):
         samples = []
         for i in row:

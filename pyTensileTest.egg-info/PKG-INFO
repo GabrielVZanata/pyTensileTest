@@ -1,3 +1,16 @@
+Metadata-Version: 2.1
+Name: pyTensileTest
+Version: 0.0.2
+Summary: A package for manipulating tensile test data, creating and correcting stress-strain diagrams.
+Home-page: https://github.com/GabrielVZanata/pyTensileTest
+Author: Gabriel Valverde Zanata da Silva
+Author-email: gabriel.valverde@hotmail.com
+License: MIT License
+Keywords: shimadzu tensile test
+Platform: UNKNOWN
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
 # Package of functions for manipulating Tensile Test data
 
 ## Contents
@@ -62,9 +75,9 @@ The linearize_diag function identifies the most linear stretch for correction of
 
 The expected arguments are:
 - df - the Dataframe containing the stress and displacement data (in the format of the df returned by the read_testdata function)
-- min_rsq - the minimum value of R² that the algorithm should look for. Note that the value of R² varies from 0 to 1, the measure approaching 1 being more linear. However, if a value is set too high, the function may not find such a linear stretch, which will cause errors.
+- min_rsq - the minimum value of RÂ² that the algorithm should look for. Note that the value of RÂ² varies from 0 to 1, the measure approaching 1 being more linear. However, if a value is set too high, the function may not find such a linear stretch, which will cause errors.
 - int_size - the size of the intervals to be analyzed in number of instants. By default, the function will analyze the data in sections containing 300 instants. The larger this interval, the more intense the linearization will be.
-If the algorithm does not find a section with defined R² and interval size, these arguments must be changed (reduced) to avoid errors.
+If the algorithm does not find a section with defined RÂ² and interval size, these arguments must be changed (reduced) to avoid errors.
 
 ``` code
 linearize_diag(df, min_rsq=0.9996, int_size=300)
@@ -88,9 +101,9 @@ The correct_diag function applies the to_tension, linearize_diag, cut_end functi
 
 The expected arguments are:
 - df - the Dataframe containing the stress and displacement data (in the format of the df returned by the read_testdata function)
-- min_rsq - the minimum value of R² that the algorithm should look for. Note that the value of R² varies from 0 to 1, the measure approaching 1 being more linear. However, if a value is set too high, the function may not find such a linear stretch, which will cause errors.
+- min_rsq - the minimum value of RÂ² that the algorithm should look for. Note that the value of RÂ² varies from 0 to 1, the measure approaching 1 being more linear. However, if a value is set too high, the function may not find such a linear stretch, which will cause errors.
 - int_size - the size of the intervals to be analyzed in number of instants. By default, the function will analyze the data in sections containing 300 instants. The larger this interval, the more intense the linearization will be.
-If the algorithm does not find a section with defined R² and interval size, these arguments must be changed (reduced) to avoid errors.
+If the algorithm does not find a section with defined RÂ² and interval size, these arguments must be changed (reduced) to avoid errors.
 - correct_force - If TRUE it will apply the to_tension function to the dataframe and wait to receive the diam parameter.
 - diam - list containing the diameters of each sample, in the order they appear in the Dataframe.
 
@@ -169,3 +182,5 @@ The communication channels cited above can be used for reporting bugs and giving
 ## Copyright and license
 
 Code and documentation copyright 2023 Gabriel Valverde Zanata da Silva. Code released under the [MIT License](https://reponame/blob/master/LICENSE).
+
+
